@@ -211,6 +211,7 @@ export default function StoryboardCanvas({
       if (shotId && fabricRef.current) {
         const dataUrl = fabricRef.current.toDataURL({ format: 'png' });
         canvasDrawingsDB.saveDrawing(shotId, dataUrl).catch(console.error);
+        window.umami?.track('storyboard_drawn', { shotId });
       }
     };
     canvas.on('path:created', handlePathCreated);

@@ -185,6 +185,9 @@ function ShotNode({ id, data }) {
     const nextCompleted = !isCompleted;
     setIsCompleted(nextCompleted);
     onUpdateNodeData?.(id, { isCompleted: nextCompleted });
+    if (nextCompleted) {
+      window.umami?.track('shot_wrapped', { shotId: shot_id });
+    }
   };
 
   const handleToggleChecklistItem = async (itemId, currentDone) => {

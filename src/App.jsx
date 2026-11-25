@@ -403,6 +403,7 @@ export default function App() {
         const savedRecords = await shotsDB.saveShots(parsedShots);
         await screenplayDB.saveScreenplay(scriptText);
         generateFlowFromShots(savedRecords);
+        window.umami?.track('script_parsed', { shotCount: parsedShots.length });
       } else {
         throw new Error('No shots were returned from the model.');
       }
@@ -557,6 +558,7 @@ export default function App() {
       const allShots = [...existingShots, newShot];
       const saved = await shotsDB.saveShots(allShots);
       generateFlowFromShots(saved);
+      window.umami?.track('shot_created', { shotId: newShot.shot_id });
     } catch (err) {
       console.error('Failed to add manual shot:', err);
       // Fallback: just add to canvas without DB
