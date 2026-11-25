@@ -86,7 +86,7 @@ export function getGeminiModel() {
     const stored = window.localStorage.getItem(GEMINI_MODEL_STORAGE_KEY);
     if (stored && stored.trim()) {
       const trimmed = stored.trim();
-      if (/^gemini-(1\.5|2\.0)/i.test(trimmed)) {
+      if (/^(?:models\/)?gemini-(1\.5|2\.0)/i.test(trimmed)) {
         window.localStorage.setItem(GEMINI_MODEL_STORAGE_KEY, DEFAULT_GEMINI_MODEL);
         return DEFAULT_GEMINI_MODEL;
       }
@@ -156,8 +156,8 @@ ${scriptText}
 Return a clean JSON array containing only the shot objects matching the schema.`;
 
   const primaryModel = getGeminiModel();
-  // Primary model (default gemini-3.8-flash) with fallback to gemini-2.5-flash
-  const modelsToTry = Array.from(new Set([primaryModel, 'gemini-2.5-flash']));
+  // Primary model (default gemini-3.8-flash) with fallback to DEFAULT_GEMINI_MODEL and gemini-2.5-flash
+  const modelsToTry = Array.from(new Set([primaryModel, DEFAULT_GEMINI_MODEL, 'gemini-2.5-flash']));
   let lastError = null;
 
   for (const model of modelsToTry) {
@@ -195,8 +195,16 @@ Return a clean JSON array containing only the shot objects matching the schema.`
           'Your Gemini API key is invalid or has expired. Please verify your key in Settings or generate a new one at Google AI Studio.'
         );
       }
-      // If model not found (404), continue to next fallback model
-      if (err?.status === 404 || err?.message?.includes('not found') || err?.message?.includes('NotFound')) {
+      // If model not found / deprecated (404), continue to next fallback model
+      if (
+        err?.status === 404 ||
+        err?.code === 404 ||
+        err?.error?.code === 404 ||
+        err?.message?.includes('not found') ||
+        err?.message?.includes('NotFound') ||
+        err?.message?.includes('NOT_FOUND') ||
+        err?.message?.includes('no longer available')
+      ) {
         continue;
       }
       // For JSON parsing errors or other errors on valid responses, break
