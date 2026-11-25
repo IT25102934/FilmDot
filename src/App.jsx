@@ -36,7 +36,7 @@ import ShotNode from './components/nodes/ShotNode';
 import ImageNode from './components/nodes/ImageNode';
 import SettingsModal from './components/modals/SettingsModal';
 import LiveStatsModal from './components/modals/LiveStatsModal';
-import { parseScriptToShots, hasGeminiApiKey } from './services/geminiService';
+import { parseScriptLocally } from './services/scriptParser';
 import { shotsDB, screenplayDB, canvasDrawingsDB, imageNodesDB, db } from './db/database';
 
 // Register custom node types outside the component to prevent re-renders
@@ -384,24 +384,15 @@ export default function App() {
     };
   }, [generateFlowFromShots, restoreImageNodes]);
 
-  // Handle Break Down Script
+  // Handle Break Down Script (local parser — no API call)
   const handleBreakdown = async () => {
     if (!scriptText.trim()) return;
-
-    // Check if user has an API key configured; prompt nicely if missing
-    if (!hasGeminiApiKey()) {
-      setSettingsModalOpen(true);
-      setError(
-        'Gemini API key is required for AI screenplay breakdown. Enter your free API key in Settings, or get one at Google AI Studio.'
-      );
-      return;
-    }
 
     setIsLoading(true);
     setError(null);
 
     try {
-      const parsedShots = await parseScriptToShots(scriptText);
+      const parsedShots = parseScriptLocally(scriptText);
       if (parsedShots && parsedShots.length > 0) {
         // Persist shots and screenplay to IndexedDB for offline access
         const savedRecords = await shotsDB.saveShots(parsedShots);
@@ -409,14 +400,11 @@ export default function App() {
         generateFlowFromShots(savedRecords);
         window.umami?.track('script_parsed', { shotCount: parsedShots.length });
       } else {
-        throw new Error('No shots were returned from the model.');
+        throw new Error('No shots could be extracted from the screenplay text.');
       }
     } catch (err) {
       console.error('Script breakdown failed:', err);
-      if (err?.code === 'NO_API_KEY') {
-        setSettingsModalOpen(true);
-      }
-      setError(err.message || 'Failed to analyze screenplay with Gemini.');
+      setError(err.message || 'Failed to parse screenplay.');
     } finally {
       setIsLoading(false);
     }
@@ -715,7 +703,7 @@ export default function App() {
                 {isLoading ? (
                   <>
                     <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                    <span>Analyzing Scene with Gemini 3.8...</span>
+                    <span>Splitting Script into Shots...</span>
                   </>
                 ) : (
                   <>
