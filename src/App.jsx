@@ -759,13 +759,7 @@ export default function App() {
                     <AlertCircle className="h-4 w-4 shrink-0 text-red-400 mt-0.5" />
                     <p className="leading-snug">{error}</p>
                   </div>
-                  <div className="pt-1 flex items-center justify-between border-t border-red-500/20 text-[11px]">
-                    <button
-                      onClick={() => setSettingsModalOpen(true)}
-                      className="font-medium text-indigo-400 hover:text-indigo-300 underline"
-                    >
-                      Configure API Key in Settings
-                    </button>
+                  <div className="pt-1 flex items-center justify-end border-t border-red-500/20 text-[11px]">
                     <button
                       onClick={handleLoadDemo}
                       className="font-medium text-slate-400 hover:text-slate-200"

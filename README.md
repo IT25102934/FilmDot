@@ -6,7 +6,7 @@ FilmDot is a browser-based, offline-first production workspace designed for film
 
 ## ✨ Features
 
-- **AI Screenplay Breakdown**: Direct screenplay analysis powered by Google Gemini (Gemini 2.5/3.8 Flash models via `@google/genai`). Generates framing, camera movements, prime/zoom lens presets, lighting styles, color temperatures, descriptions, and character rosters.
+- **Instant Local Screenplay Breakdown**: Splits screenplay text into structured shot nodes locally based on scene headings (`INT.` / `EXT.`), action blocks, and character dialogue — instant, zero API latency, and works 100% offline.
 - **Node-Based Shot Flow**: Interactive visual sequencing powered by `@xyflow/react` with persistent drag-and-drop positioning, automatic connector edges, and image moodboard attachments.
 - **Stylus Storyboard Canvas**: Full HTML5 vector drawing canvas powered by Fabric.js with pressure smoothing, opacity-controlled reference underlays, undo history (`Ctrl+Z`), and multi-revision snapshots.
 - **On-Set Production Tracker**: Take counter, shot completion milestones, and pre-production checklists stored locally via Dexie IndexedDB.
@@ -27,24 +27,14 @@ Clone or extract the repository, then install project dependencies:
 npm install
 ```
 
-### 2. Configure Your Gemini API Key (Optional)
-You can configure your Google Gemini API key in two ways:
-
-1. **In-App (Recommended)**: Click the **Settings** gear icon in the FilmDot interface and paste your key. It is saved directly to your browser's `localStorage` and never shared with third parties.
-2. **Environment File**: Create a `.env` file in the project root:
-   ```env
-   VITE_GEMINI_API_KEY=your_gemini_api_key_here
-   ```
-*(Get a free key from [Google AI Studio](https://aistudio.google.com/app/apikey)).*
-
-### 3. Run Locally
+### 2. Run Locally
 Start the development server:
 ```bash
 npm run dev
 ```
 Open [http://localhost:5173](http://localhost:5173) in your web browser.
 
-### 4. Production Build
+### 3. Production Build
 ```bash
 npm run build
 npm run preview
