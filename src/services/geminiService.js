@@ -1,6 +1,8 @@
 import { GoogleGenAI } from '@google/genai';
 
 export const GEMINI_API_KEY_STORAGE_KEY = 'filmdot_gemini_api_key';
+export const GEMINI_MODEL_STORAGE_KEY = 'filmdot_gemini_model';
+export const DEFAULT_GEMINI_MODEL = 'gemini-3.8-flash';
 
 /**
  * Custom error class for missing API key with standard error code.
@@ -76,6 +78,25 @@ export function hasGeminiApiKey() {
 }
 
 /**
+ * Retrieves the active Gemini model from localStorage, automatically migrating
+ * any outdated gemini-1.5 or gemini-2.0 model strings to DEFAULT_GEMINI_MODEL.
+ */
+export function getGeminiModel() {
+  if (typeof window !== 'undefined' && window.localStorage) {
+    const stored = window.localStorage.getItem(GEMINI_MODEL_STORAGE_KEY);
+    if (stored && stored.trim()) {
+      const trimmed = stored.trim();
+      if (/^gemini-(1\.5|2\.0)/i.test(trimmed)) {
+        window.localStorage.setItem(GEMINI_MODEL_STORAGE_KEY, DEFAULT_GEMINI_MODEL);
+        return DEFAULT_GEMINI_MODEL;
+      }
+      return trimmed;
+    }
+  }
+  return DEFAULT_GEMINI_MODEL;
+}
+
+/**
  * Initializes and returns a GoogleGenAI instance using the active API key.
  * Throws MissingApiKeyError if no key is configured.
  */
@@ -134,8 +155,9 @@ ${scriptText}
 
 Return a clean JSON array containing only the shot objects matching the schema.`;
 
-  // Primary model gemini-3.8-flash with fallback to gemini-2.5-flash / gemini-2.0-flash
-  const modelsToTry = ['gemini-3.8-flash', 'gemini-2.5-flash', 'gemini-2.0-flash'];
+  const primaryModel = getGeminiModel();
+  // Primary model (default gemini-3.8-flash) with fallback to gemini-2.5-flash
+  const modelsToTry = Array.from(new Set([primaryModel, 'gemini-2.5-flash']));
   let lastError = null;
 
   for (const model of modelsToTry) {
@@ -193,6 +215,9 @@ export default {
   getApiKeySource,
   setGeminiApiKey,
   hasGeminiApiKey,
+  getGeminiModel,
   MissingApiKeyError,
   GEMINI_API_KEY_STORAGE_KEY,
+  GEMINI_MODEL_STORAGE_KEY,
+  DEFAULT_GEMINI_MODEL,
 };
