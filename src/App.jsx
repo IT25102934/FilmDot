@@ -35,6 +35,7 @@ import {
 import ShotNode from './components/nodes/ShotNode';
 import ImageNode from './components/nodes/ImageNode';
 import SettingsModal from './components/modals/SettingsModal';
+import LiveStatsModal from './components/modals/LiveStatsModal';
 import { parseScriptToShots, hasGeminiApiKey } from './services/geminiService';
 import { shotsDB, screenplayDB, canvasDrawingsDB, imageNodesDB, db } from './db/database';
 
@@ -144,6 +145,9 @@ export default function App() {
 
   // Settings modal state
   const [settingsModalOpen, setSettingsModalOpen] = useState(false);
+
+  // Live Stats modal state
+  const [liveStatsModalOpen, setLiveStatsModalOpen] = useState(false);
 
   // Manual shot add modal state
   const [manualShotModalOpen, setManualShotModalOpen] = useState(false);
@@ -942,6 +946,18 @@ export default function App() {
               </div>
               <div className="h-3 w-px bg-slate-700" />
               <button
+                onClick={() => setLiveStatsModalOpen(true)}
+                className="flex items-center gap-1.5 text-slate-400 hover:text-white transition-colors"
+                title="View Live Analytics"
+              >
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+                </span>
+                <span className="hidden sm:inline">Live Stats</span>
+              </button>
+              <div className="h-3 w-px bg-slate-700" />
+              <button
                 onClick={() => setSettingsModalOpen(true)}
                 className="flex items-center gap-1.5 text-slate-400 hover:text-white transition-colors"
                 title="Settings & API Key"
@@ -1181,6 +1197,12 @@ export default function App() {
         onApiKeySaved={() => {
           setError(null);
         }}
+      />
+
+      {/* ── Live Stats (Umami) Modal ── */}
+      <LiveStatsModal
+        isOpen={liveStatsModalOpen}
+        onClose={() => setLiveStatsModalOpen(false)}
       />
     </div>
   );
