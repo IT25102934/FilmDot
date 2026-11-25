@@ -79,14 +79,16 @@ export function hasGeminiApiKey() {
 
 /**
  * Retrieves the active Gemini model from localStorage, automatically migrating
- * any outdated gemini-1.5 or gemini-2.0 model strings to DEFAULT_GEMINI_MODEL.
+ * any retired model strings (gemini-1.5, gemini-2.0, gemini-2.5) to
+ * DEFAULT_GEMINI_MODEL.
  */
 export function getGeminiModel() {
   if (typeof window !== 'undefined' && window.localStorage) {
     const stored = window.localStorage.getItem(GEMINI_MODEL_STORAGE_KEY);
     if (stored && stored.trim()) {
       const trimmed = stored.trim();
-      if (/^(?:models\/)?gemini-(1\.5|2\.0)/i.test(trimmed)) {
+      // Migrate any retired model (1.x or 2.x family) → current default
+      if (/^(?:models\/)?gemini-[12]\./i.test(trimmed)) {
         window.localStorage.setItem(GEMINI_MODEL_STORAGE_KEY, DEFAULT_GEMINI_MODEL);
         return DEFAULT_GEMINI_MODEL;
       }
@@ -156,8 +158,8 @@ ${scriptText}
 Return a clean JSON array containing only the shot objects matching the schema.`;
 
   const primaryModel = getGeminiModel();
-  // Primary model (default gemini-3.8-flash) with fallback to DEFAULT_GEMINI_MODEL and gemini-2.5-flash
-  const modelsToTry = Array.from(new Set([primaryModel, DEFAULT_GEMINI_MODEL, 'gemini-2.5-flash']));
+  // Only use gemini-3.8-flash — all older models are retired
+  const modelsToTry = Array.from(new Set([primaryModel, DEFAULT_GEMINI_MODEL]));
   let lastError = null;
 
   for (const model of modelsToTry) {
