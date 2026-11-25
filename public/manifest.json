@@ -1,0 +1,19 @@
+{
+  "name": "FilmDot — Filmmaker's AI Toolkit & Storyboard",
+  "short_name": "FilmDot",
+  "description": "Cinematic shot planning, AI screenplay breakdown, and offline storyboard sketching.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#020617",
+  "theme_color": "#6366f1",
+  "categories": ["entertainment", "productivity", "utilities"],
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

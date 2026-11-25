@@ -1,0 +1,207 @@
+<mxfile host="app.diagrams.net" modified="2026-11-15T10:00:00.000Z" agent="FilmDot Architecture" version="24.0.0" type="device">
+  <diagram id="filmdot-erd" name="Database ERD">
+    <mxGraphModel dx="1420" dy="880" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="erd_title" value="&lt;b&gt;FilmDot — Dexie IndexedDB Entity-Relationship Diagram (ERD)&lt;/b&gt;&lt;br&gt;&lt;i&gt;Client-Side Offline Storage Schema, Indexes &amp; Entity Relationships&lt;/i&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;fontColor=#0F172A;" vertex="1" parent="1">
+          <mxGeometry x="450" y="25" width="750" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Table 1: screenplays -->
+        <mxCell id="tbl_screenplays" value="&lt;b&gt;screenplays&lt;/b&gt;&lt;br&gt;&lt;i&gt;IndexedDB Object Store&lt;/i&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=35;fillColor=#EFF6FF;strokeColor=#3B82F6;strokeWidth=2;fontColor=#1E3A8A;rounded=1;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="100" y="140" width="280" height="175" as="geometry" />
+        </mxCell>
+        <mxCell id="sc_f1" value="&lt;b&gt;&lt;u&gt;++id : number&lt;/u&gt;&lt;/b&gt; [PK, Auto-Inc]" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_screenplays">
+          <mxGeometry y="35" width="280" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="sc_f2" value="title : string [Default: 'Current Scene']" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_screenplays">
+          <mxGeometry y="63" width="280" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="sc_f3" value="text : string [Raw Screenplay Draft]" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_screenplays">
+          <mxGeometry y="91" width="280" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="sc_f4" value="updatedAt : string [ISO 8601 Timestamp]" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_screenplays">
+          <mxGeometry y="119" width="280" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="sc_f5" value="&lt;i&gt;Indexes: ++id&lt;/i&gt;" style="text;html=1;strokeColor=none;fillColor=#DBEAFE;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E40AF;fontSize=10;" vertex="1" parent="tbl_screenplays">
+          <mxGeometry y="147" width="280" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- Table 2: shots (Central Entity) -->
+        <mxCell id="tbl_shots" value="&lt;b&gt;shots&lt;/b&gt;&lt;br&gt;&lt;i&gt;Central Shot List &amp; Parameters Store&lt;/i&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=35;fillColor=#F8FAFC;strokeColor=#475569;strokeWidth=2.5;fontColor=#0F172A;rounded=1;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="580" y="110" width="370" height="515" as="geometry" />
+        </mxCell>
+        <mxCell id="sh_f1" value="&lt;b&gt;&lt;u&gt;++id : number&lt;/u&gt;&lt;/b&gt; [PK, Auto-Inc, Dexie DB ID]" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#0F172A;" vertex="1" parent="tbl_shots">
+          <mxGeometry y="35" width="370" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="sh_f2" value="&lt;b&gt;shot_id : string&lt;/b&gt; [Indexed, Unique Key, e.g. 'SHOT-001']" style="text;html=1;strokeColor=none;fillColor=#FEF08A;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#854D0E;" vertex="1" parent="tbl_shots">
+          <mxGeometry y="63" width="370" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="sh_f3" value="scene_number : number | string [Indexed]" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_shots">
+          <mxGeometry y="91" width="370" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="sh_f4" value="shot_type : string [Indexed, e.g. 'Close-up (CU)']" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_shots">
+          <mxGeometry y="119" width="370" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="sh_f5" value="camera_movement : string [Indexed, e.g. 'Dolly In']" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_shots">
+          <mxGeometry y="147" width="370" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="sh_f6" value="lens : string [e.g. '35mm Narrative Standard (T1.3)']" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_shots">
+          <mxGeometry y="175" width="370" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="sh_f7" value="lensType : 'Static (Prime)' | 'Conditional (Zoom)'" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_shots">
+          <mxGeometry y="203" width="370" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="sh_f8" value="lighting : string [e.g. 'Low-Key / Film Noir']" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_shots">
+          <mxGeometry y="231" width="370" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="sh_f9" value="lightingTemp : string [e.g. '5600K (Daylight Cool)']" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_shots">
+          <mxGeometry y="259" width="370" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="sh_f10" value="description : string [Visual &amp; Framing Action]" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_shots">
+          <mxGeometry y="287" width="370" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="sh_f11" value="characters : string[] [Character Names Array]" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_shots">
+          <mxGeometry y="315" width="370" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="sh_f12" value="takeNumber : number [Indexed, Current Take Count]" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_shots">
+          <mxGeometry y="343" width="370" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="sh_f13" value="isCompleted : boolean [Indexed, Wrap Status]" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_shots">
+          <mxGeometry y="371" width="370" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="sh_f14" value="order : number [Sequence Order in Flow]" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_shots">
+          <mxGeometry y="399" width="370" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="sh_f15" value="notes : string [Director / Crew On-Set Notes]" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_shots">
+          <mxGeometry y="427" width="370" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="sh_f16" value="createdAt / updatedAt : string [ISO 8601, Indexed]" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_shots">
+          <mxGeometry y="455" width="370" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="sh_f17" value="&lt;i&gt;Indexes: ++id, shot_id, scene_number, shot_type, camera_movement, isCompleted, takeNumber, createdAt, updatedAt&lt;/i&gt;" style="text;html=1;strokeColor=none;fillColor=#E2E8F0;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#334155;fontSize=9;" vertex="1" parent="tbl_shots">
+          <mxGeometry y="483" width="370" height="32" as="geometry" />
+        </mxCell>
+
+        <!-- Table 3: canvasDrawings (1-to-1 with shots) -->
+        <mxCell id="tbl_canvas" value="&lt;b&gt;canvasDrawings&lt;/b&gt;&lt;br&gt;&lt;i&gt;Active Storyboard Frame Drawings&lt;/i&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=35;fillColor=#ECFDF5;strokeColor=#10B981;strokeWidth=2;fontColor=#064E3B;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="1150" y="110" width="340" height="203" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_f1" value="&lt;b&gt;&lt;u&gt;++id : number&lt;/u&gt;&lt;/b&gt; [PK, Auto-Inc]" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_canvas">
+          <mxGeometry y="35" width="340" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_f2" value="&lt;b&gt;&amp;amp;shotId : string&lt;/b&gt; [Unique Index, FK -&amp;gt; shots.shot_id]" style="text;html=1;strokeColor=none;fillColor=#A7F3D0;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#065F46;" vertex="1" parent="tbl_canvas">
+          <mxGeometry y="63" width="340" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_f3" value="dataUrl : string [Base64 PNG Image Representation]" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_canvas">
+          <mxGeometry y="91" width="340" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_f4" value="moodboardUrl : string | null [Reference Backdrop]" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_canvas">
+          <mxGeometry y="119" width="340" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_f5" value="createdAt / updatedAt : string [ISO 8601]" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_canvas">
+          <mxGeometry y="147" width="340" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_f6" value="&lt;i&gt;Indexes: ++id, &amp;amp;shotId (Unique)&lt;/i&gt;" style="text;html=1;strokeColor=none;fillColor=#D1FAE5;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#047857;fontSize=10;" vertex="1" parent="tbl_canvas">
+          <mxGeometry y="175" width="340" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- Table 4: canvasDrawingSnapshots (1-to-Many with shots, Rolling 20) -->
+        <mxCell id="tbl_snapshots" value="&lt;b&gt;canvasDrawingSnapshots&lt;/b&gt;&lt;br&gt;&lt;i&gt;Rolling 20 Revision Safety Backups&lt;/i&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=35;fillColor=#F3E8FF;strokeColor=#9333EA;strokeWidth=2;fontColor=#581C87;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="1150" y="380" width="340" height="175" as="geometry" />
+        </mxCell>
+        <mxCell id="ss_f1" value="&lt;b&gt;&lt;u&gt;++id : number&lt;/u&gt;&lt;/b&gt; [PK, Auto-Inc]" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_snapshots">
+          <mxGeometry y="35" width="340" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="ss_f2" value="&lt;b&gt;shotId : string&lt;/b&gt; [Indexed, FK -&amp;gt; shots.shot_id]" style="text;html=1;strokeColor=none;fillColor=#E9D5FF;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#6B21A8;" vertex="1" parent="tbl_snapshots">
+          <mxGeometry y="63" width="340" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="ss_f3" value="dataUrl : string [Base64 PNG Snapshot]" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_snapshots">
+          <mxGeometry y="91" width="340" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="ss_f4" value="createdAt : string [Timestamp, Reverse Sorted]" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_snapshots">
+          <mxGeometry y="119" width="340" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="ss_f5" value="&lt;i&gt;Indexes: ++id, shotId (Pruned to max 20 per shot)&lt;/i&gt;" style="text;html=1;strokeColor=none;fillColor=#F3E8FF;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#7E22CE;fontSize=10;" vertex="1" parent="tbl_snapshots">
+          <mxGeometry y="147" width="340" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- Table 5: progressChecklists (1-to-Many with shots) -->
+        <mxCell id="tbl_checklist" value="&lt;b&gt;progressChecklists&lt;/b&gt;&lt;br&gt;&lt;i&gt;On-Set Department Checklist Items&lt;/i&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=35;fillColor=#FFF1F2;strokeColor=#F43F5E;strokeWidth=2;fontColor=#881337;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="580" y="700" width="370" height="231" as="geometry" />
+        </mxCell>
+        <mxCell id="ck_f1" value="&lt;b&gt;&lt;u&gt;++id : number&lt;/u&gt;&lt;/b&gt; [PK, Auto-Inc]" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_checklist">
+          <mxGeometry y="35" width="370" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="ck_f2" value="&lt;b&gt;shotId : string&lt;/b&gt; [Indexed, FK -&amp;gt; shots.shot_id]" style="text;html=1;strokeColor=none;fillColor=#FECDD3;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#9F1239;" vertex="1" parent="tbl_checklist">
+          <mxGeometry y="63" width="370" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="ck_f3" value="task : string [Action description]" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_checklist">
+          <mxGeometry y="91" width="370" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="ck_f4" value="category : string ['Directing', 'Camera', 'Lighting', 'Audio', ...]" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_checklist">
+          <mxGeometry y="119" width="370" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="ck_f5" value="isDone : boolean [Default: false]" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_checklist">
+          <mxGeometry y="147" width="370" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="ck_f6" value="completedAt : string | null [ISO 8601 Timestamp]" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_checklist">
+          <mxGeometry y="175" width="370" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="ck_f7" value="&lt;i&gt;Indexes: ++id, shotId, category, isDone&lt;/i&gt;" style="text;html=1;strokeColor=none;fillColor=#FFE4E6;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#BE123C;fontSize=10;" vertex="1" parent="tbl_checklist">
+          <mxGeometry y="203" width="370" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- ──────────────── RELATIONSHIPS & CONNECTORS ──────────────── -->
+        <!-- Relationship 1: screenplays (1) to shots (N) -->
+        <mxCell id="rel_screenplay_shots" value="&lt;b&gt;1 : N&lt;/b&gt;&lt;br&gt;&lt;i&gt;Breaks down into&lt;/i&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#2563EB;strokeWidth=2;fontColor=#1E3A8A;labelBackgroundColor=#EFF6FF;" edge="1" parent="1" source="tbl_screenplays" target="tbl_shots">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="480" y="227" />
+              <mxPoint x="480" y="227" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Relationship 2: shots (1) to canvasDrawings (1) -->
+        <mxCell id="rel_shots_canvas" value="&lt;b&gt;1 : 1&lt;/b&gt;&lt;br&gt;&lt;i&gt;Active Frame Drawing&lt;br&gt;(&amp;amp;shotId unique index)&lt;/i&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#059669;strokeWidth=2;fontColor=#064E3B;labelBackgroundColor=#ECFDF5;" edge="1" parent="1" source="tbl_shots" target="tbl_canvas">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1050" y="210" />
+              <mxPoint x="1050" y="210" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Relationship 3: shots (1) to canvasDrawingSnapshots (N) -->
+        <mxCell id="rel_shots_snapshots" value="&lt;b&gt;1 : N&lt;/b&gt;&lt;br&gt;&lt;i&gt;History Snapshots&lt;br&gt;(Rolling 20 revisions)&lt;/i&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#7E22CE;strokeWidth=2;fontColor=#581C87;labelBackgroundColor=#FAF5FF;" edge="1" parent="1" source="tbl_shots" target="tbl_snapshots">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1050" y="465" />
+              <mxPoint x="1050" y="465" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Relationship 4: shots (1) to progressChecklists (N) -->
+        <mxCell id="rel_shots_checklist" value="&lt;b&gt;1 : N&lt;/b&gt;&lt;br&gt;&lt;i&gt;Production Checklist Items&lt;br&gt;(6 standard + custom tasks)&lt;/i&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#E11D48;strokeWidth=2;fontColor=#881337;labelBackgroundColor=#FFF1F2;" edge="1" parent="1" source="tbl_shots" target="tbl_checklist">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="765" y="650" />
+              <mxPoint x="765" y="650" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Legend / Notes Callout -->
+        <mxCell id="erd_legend" value="&lt;b&gt;Dexie IndexedDB Schema Specifications:&lt;/b&gt;&lt;br&gt;• &lt;b&gt;++id&lt;/b&gt; : Auto-incrementing primary integer key&lt;br&gt;• &lt;b&gt;&amp;amp;field&lt;/b&gt; : Unique indexed constraint (1-to-1 relationship enforced on &amp;amp;shotId)&lt;br&gt;• &lt;b&gt;field&lt;/b&gt; : Standard index for rapid lookups and range queries&lt;br&gt;• &lt;b&gt;Offline-First&lt;/b&gt; : All tables persist locally inside the browser's IndexedDB engine" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fillColor=#FEF9C3;strokeColor=#CA8A04;fontColor=#854D0E;align=left;spacingLeft=10;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="100" y="400" width="380" height="150" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

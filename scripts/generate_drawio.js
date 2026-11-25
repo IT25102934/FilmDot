@@ -1,0 +1,1015 @@
+// scripts/generate_drawio.js
+// Generates professional Draw.io diagrams for FilmDot:
+// 1. Use Case Diagram
+// 2. Database Relationships (ERD)
+// 3. Sequence Diagrams (AI Breakdown, Canvas Revisions, On-Set Tracking)
+// 4. Tool Flow & Architecture
+// 5. Master All-in-One Multi-Page Draw.io file
+
+import fs from 'fs';
+import path from 'path';
+
+function _escapeXml(unsafe) {
+  if (typeof unsafe !== 'string') return '';
+  return unsafe
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
+}
+
+// ─────────────────────────────────────────────────────────────
+// 1. USE CASE DIAGRAM XML
+// ─────────────────────────────────────────────────────────────
+function generateUseCaseXml() {
+  return `<mxfile host="app.diagrams.net" modified="2026-11-15T10:00:00.000Z" agent="FilmDot Architecture" version="24.0.0" type="device">
+  <diagram id="filmdot-usecase" name="Use Case Diagram">
+    <mxGraphModel dx="1420" dy="880" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title" value="&lt;b&gt;FilmDot — System Use Case Diagram&lt;/b&gt;&lt;br&gt;&lt;i&gt;AI-Powered Filmmaking, Storyboarding &amp; On-Set Production Tracking&lt;/i&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;fontColor=#1E293B;" vertex="1" parent="1">
+          <mxGeometry x="480" y="20" width="700" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- System Boundary Box -->
+        <mxCell id="sys_boundary" value="&lt;b&gt;FilmDot PWA Studio System Boundary&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingLeft=20;spacingTop=10;fillColor=#F8FAFC;strokeColor=#475569;strokeWidth=2;dashed=1;fontSize=14;fontColor=#0F172A;" vertex="1" parent="1">
+          <mxGeometry x="280" y="80" width="1080" height="980" as="geometry" />
+        </mxCell>
+
+        <!-- Subsystem 1: Script & AI Breakdown -->
+        <mxCell id="sub_script" value="Screenplay &amp; AI Breakdown Subsystem" style="swimlane;whiteSpace=wrap;html=1;fillColor=#EFF6FF;strokeColor=#3B82F6;strokeWidth=1.5;fontColor=#1E3A8A;fontStyle=1;startSize=26;" vertex="1" parent="sys_boundary">
+          <mxGeometry x="30" y="50" width="480" height="260" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_input_script" value="Enter / Edit Screenplay Text" style="ellipse;whiteSpace=wrap;html=1;fillColor=#DBEAFE;strokeColor=#2563EB;fontColor=#1E40AF;fontStyle=1;" vertex="1" parent="sub_script">
+          <mxGeometry x="30" y="40" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_breakdown" value="Break Down Script into Shots" style="ellipse;whiteSpace=wrap;html=1;fillColor=#DBEAFE;strokeColor=#2563EB;fontColor=#1E40AF;fontStyle=1;" vertex="1" parent="sub_script">
+          <mxGeometry x="260" y="40" width="190" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_gemini_api" value="Infer Cinematic Specs with Gemini 3.8 Flash" style="ellipse;whiteSpace=wrap;html=1;fillColor=#DBEAFE;strokeColor=#2563EB;fontColor=#1E40AF;fontStyle=1;" vertex="1" parent="sub_script">
+          <mxGeometry x="255" y="160" width="200" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_fallback" value="Fallback to Offline Demo Shots" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FEE2E2;strokeColor=#DC2626;fontColor=#991B1B;" vertex="1" parent="sub_script">
+          <mxGeometry x="30" y="170" width="180" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Subsystem 2: Node Graph & Sequencing -->
+        <mxCell id="sub_flow" value="Interactive Shot Flow Graph (React Flow)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#F5F3FF;strokeColor=#8B5CF6;strokeWidth=1.5;fontColor=#4C1D95;fontStyle=1;startSize=26;" vertex="1" parent="sys_boundary">
+          <mxGeometry x="540" y="50" width="500" height="260" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_view_nodes" value="Visualize Sequential Shot Cards" style="ellipse;whiteSpace=wrap;html=1;fillColor=#EDE9FE;strokeColor=#7C3AED;fontColor=#5B21B6;fontStyle=1;" vertex="1" parent="sub_flow">
+          <mxGeometry x="40" y="40" width="190" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_add_manual" value="Add Manual Shot Card" style="ellipse;whiteSpace=wrap;html=1;fillColor=#EDE9FE;strokeColor=#7C3AED;fontColor=#5B21B6;fontStyle=1;" vertex="1" parent="sub_flow">
+          <mxGeometry x="270" y="40" width="190" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_connect_image" value="Upload &amp; Connect Moodboard Image Node" style="ellipse;whiteSpace=wrap;html=1;fillColor=#EDE9FE;strokeColor=#7C3AED;fontColor=#5B21B6;fontStyle=1;" vertex="1" parent="sub_flow">
+          <mxGeometry x="140" y="150" width="230" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- Subsystem 3: Visual Storyboarding Canvas -->
+        <mxCell id="sub_canvas" value="Stylus Storyboard Canvas (Fabric.js)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#ECFDF5;strokeColor=#10B981;strokeWidth=1.5;fontColor=#064E3B;fontStyle=1;startSize=26;" vertex="1" parent="sys_boundary">
+          <mxGeometry x="30" y="340" width="480" height="300" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_draw_sketch" value="Draw Frame Sketch with Stylus / Mouse" style="ellipse;whiteSpace=wrap;html=1;fillColor=#D1FAE5;strokeColor=#059669;fontColor=#065F46;fontStyle=1;" vertex="1" parent="sub_canvas">
+          <mxGeometry x="30" y="40" width="200" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_canvas_tools" value="Customize Brush, Eraser, Color &amp; Opacity" style="ellipse;whiteSpace=wrap;html=1;fillColor=#D1FAE5;strokeColor=#059669;fontColor=#065F46;" vertex="1" parent="sub_canvas">
+          <mxGeometry x="260" y="40" width="200" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_undo_redo" value="Undo / Redo Canvas Strokes (Ctrl+Z / Ctrl+C)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#D1FAE5;strokeColor=#059669;fontColor=#065F46;" vertex="1" parent="sub_canvas">
+          <mxGeometry x="30" y="130" width="200" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_auto_snapshot" value="Auto-Save Revision History (20-Roll Snapshots)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#D1FAE5;strokeColor=#059669;fontColor=#065F46;fontStyle=1;" vertex="1" parent="sub_canvas">
+          <mxGeometry x="260" y="130" width="200" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_export_frame" value="Export Storyboard PNG / Frame Sheet" style="ellipse;whiteSpace=wrap;html=1;fillColor=#D1FAE5;strokeColor=#059669;fontColor=#065F46;" vertex="1" parent="sub_canvas">
+          <mxGeometry x="145" y="215" width="200" height="65" as="geometry" />
+        </mxCell>
+
+        <!-- Subsystem 4: Camera & Cinematic Parameter Customization -->
+        <mxCell id="sub_camera" value="Cinematic Parameter Customization" style="swimlane;whiteSpace=wrap;html=1;fillColor=#FFFBEB;strokeColor=#F59E0B;strokeWidth=1.5;fontColor=#78350F;fontStyle=1;startSize=26;" vertex="1" parent="sys_boundary">
+          <mxGeometry x="540" y="340" width="500" height="300" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_shot_framing" value="Select Framing &amp; Camera Movement" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FEF3C7;strokeColor=#D97706;fontColor=#92400E;fontStyle=1;" vertex="1" parent="sub_camera">
+          <mxGeometry x="40" y="40" width="200" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_lens_select" value="Choose Lens (Static Prime vs Conditional Zoom)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FEF3C7;strokeColor=#D97706;fontColor=#92400E;fontStyle=1;" vertex="1" parent="sub_camera">
+          <mxGeometry x="265" y="40" width="210" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_lighting_temp" value="Configure Lighting Setup &amp; Color Temp" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FEF3C7;strokeColor=#D97706;fontColor=#92400E;" vertex="1" parent="sub_camera">
+          <mxGeometry x="40" y="135" width="200" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_char_notes" value="Edit Character Tags &amp; Scene Action Notes" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FEF3C7;strokeColor=#D97706;fontColor=#92400E;" vertex="1" parent="sub_camera">
+          <mxGeometry x="265" y="135" width="210" height="65" as="geometry" />
+        </mxCell>
+
+        <!-- Subsystem 5: On-Set Take Tracking & Production Checklist -->
+        <mxCell id="sub_onset" value="On-Set Wrap Checklist &amp; Take Recording" style="swimlane;whiteSpace=wrap;html=1;fillColor=#FFF1F2;strokeColor=#F43F5E;strokeWidth=1.5;fontColor=#881337;fontStyle=1;startSize=26;" vertex="1" parent="sys_boundary">
+          <mxGeometry x="30" y="670" width="480" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_increment_take" value="Record Take Number (+/- Increment)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FFE4E6;strokeColor=#E11D48;fontColor=#9F1239;fontStyle=1;" vertex="1" parent="sub_onset">
+          <mxGeometry x="30" y="40" width="190" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_toggle_wrap" value="Toggle Shot Wrap (Completed / Pending)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FFE4E6;strokeColor=#E11D48;fontColor=#9F1239;fontStyle=1;" vertex="1" parent="sub_onset">
+          <mxGeometry x="250" y="40" width="200" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_execute_check" value="Check 6-Dept Production Checklist" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FFE4E6;strokeColor=#E11D48;fontColor=#9F1239;fontStyle=1;" vertex="1" parent="sub_onset">
+          <mxGeometry x="30" y="130" width="190" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_add_task" value="Add Custom Checklist Task" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FFE4E6;strokeColor=#E11D48;fontColor=#9F1239;" vertex="1" parent="sub_onset">
+          <mxGeometry x="255" y="130" width="190" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_track_progress" value="Track Real-Time Wrap Progress Percentage" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FFE4E6;strokeColor=#E11D48;fontColor=#9F1239;" vertex="1" parent="sub_onset">
+          <mxGeometry x="135" y="205" width="220" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Subsystem 6: Offline & Persistence -->
+        <mxCell id="sub_persist" value="Offline-First Persistence (Dexie IndexedDB)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#64748B;strokeWidth=1.5;fontColor=#0F172A;fontStyle=1;startSize=26;" vertex="1" parent="sys_boundary">
+          <mxGeometry x="540" y="670" width="500" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_save_shots_db" value="Persist Shots &amp; Parameters to IndexedDB" style="ellipse;whiteSpace=wrap;html=1;fillColor=#E2E8F0;strokeColor=#475569;fontColor=#1E293B;fontStyle=1;" vertex="1" parent="sub_persist">
+          <mxGeometry x="40" y="40" width="210" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_save_drawing_db" value="Store Base64 Storyboard Canvas in IndexedDB" style="ellipse;whiteSpace=wrap;html=1;fillColor=#E2E8F0;strokeColor=#475569;fontColor=#1E293B;fontStyle=1;" vertex="1" parent="sub_persist">
+          <mxGeometry x="270" y="40" width="210" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_restore_state" value="Auto-Restore Project State on Reload" style="ellipse;whiteSpace=wrap;html=1;fillColor=#E2E8F0;strokeColor=#475569;fontColor=#1E293B;" vertex="1" parent="sub_persist">
+          <mxGeometry x="40" y="140" width="210" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_offline_sync" value="Seamless Offline PWA Operation" style="ellipse;whiteSpace=wrap;html=1;fillColor=#E2E8F0;strokeColor=#475569;fontColor=#1E293B;" vertex="1" parent="sub_persist">
+          <mxGeometry x="270" y="140" width="210" height="65" as="geometry" />
+        </mxCell>
+
+        <!-- ──────────────── ACTORS ──────────────── -->
+        <!-- Actor 1: Director / Screenwriter -->
+        <mxCell id="actor_director" value="&lt;b&gt;Director /&lt;br&gt;Screenwriter&lt;/b&gt;" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#DBEAFE;strokeColor=#2563EB;strokeWidth=2;fontColor=#1E3A8A;" vertex="1" parent="1">
+          <mxGeometry x="70" y="150" width="50" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- Actor 2: Cinematographer / DP -->
+        <mxCell id="actor_dp" value="&lt;b&gt;Cinematographer /&lt;br&gt;DP / Storyboard Artist&lt;/b&gt;" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#D1FAE5;strokeColor=#059669;strokeWidth=2;fontColor=#064E3B;" vertex="1" parent="1">
+          <mxGeometry x="70" y="450" width="50" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- Actor 3: Script Supervisor / 1st AD -->
+        <mxCell id="actor_crew" value="&lt;b&gt;Script Supervisor /&lt;br&gt;1st AD / Camera Crew&lt;/b&gt;" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#FFE4E6;strokeColor=#E11D48;strokeWidth=2;fontColor=#881337;" vertex="1" parent="1">
+          <mxGeometry x="70" y="770" width="50" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- Actor 4: External Google Gemini AI -->
+        <mxCell id="actor_gemini" value="&lt;b&gt;&amp;laquo;Service&amp;raquo;&lt;br&gt;Google Gemini&lt;br&gt;3.8 Flash API&lt;/b&gt;" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#F3E8FF;strokeColor=#7E22CE;strokeWidth=2;fontColor=#581C87;" vertex="1" parent="1">
+          <mxGeometry x="1450" y="180" width="50" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- Actor 5: Dexie IndexedDB -->
+        <mxCell id="actor_dexie" value="&lt;b&gt;&amp;laquo;Database&amp;raquo;&lt;br&gt;Dexie IndexedDB&lt;br&gt;(Local Storage)&lt;/b&gt;" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#E2E8F0;strokeColor=#475569;strokeWidth=2;fontColor=#0F172A;" vertex="1" parent="1">
+          <mxGeometry x="1450" y="780" width="50" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- ──────────────── ACTOR ASSOCIATIONS ──────────────── -->
+        <!-- Director Links -->
+        <mxCell id="link_dir_1" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;strokeColor=#2563EB;strokeWidth=1.5;" edge="1" parent="1" source="actor_director" target="uc_input_script">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="link_dir_2" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;strokeColor=#2563EB;strokeWidth=1.5;" edge="1" parent="1" source="actor_director" target="uc_breakdown">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="link_dir_3" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;strokeColor=#2563EB;strokeWidth=1.5;" edge="1" parent="1" source="actor_director" target="uc_view_nodes">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="link_dir_4" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;strokeColor=#2563EB;strokeWidth=1.5;" edge="1" parent="1" source="actor_director" target="uc_add_manual">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- DP Links -->
+        <mxCell id="link_dp_1" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;strokeColor=#059669;strokeWidth=1.5;" edge="1" parent="1" source="actor_dp" target="uc_draw_sketch">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="link_dp_2" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;strokeColor=#059669;strokeWidth=1.5;" edge="1" parent="1" source="actor_dp" target="uc_canvas_tools">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="link_dp_3" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;strokeColor=#059669;strokeWidth=1.5;" edge="1" parent="1" source="actor_dp" target="uc_shot_framing">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="link_dp_4" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;strokeColor=#059669;strokeWidth=1.5;" edge="1" parent="1" source="actor_dp" target="uc_lens_select">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="link_dp_5" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;strokeColor=#059669;strokeWidth=1.5;" edge="1" parent="1" source="actor_dp" target="uc_connect_image">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Crew Links -->
+        <mxCell id="link_crew_1" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;strokeColor=#E11D48;strokeWidth=1.5;" edge="1" parent="1" source="actor_crew" target="uc_increment_take">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="link_crew_2" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;strokeColor=#E11D48;strokeWidth=1.5;" edge="1" parent="1" source="actor_crew" target="uc_toggle_wrap">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="link_crew_3" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;strokeColor=#E11D48;strokeWidth=1.5;" edge="1" parent="1" source="actor_crew" target="uc_execute_check">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="link_crew_4" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;strokeColor=#E11D48;strokeWidth=1.5;" edge="1" parent="1" source="actor_crew" target="uc_track_progress">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Gemini Service Link -->
+        <mxCell id="link_gemini" style="edgeStyle=none;html=1;entryX=1;entryY=0.5;strokeColor=#7E22CE;strokeWidth=1.5;" edge="1" parent="1" source="actor_gemini" target="uc_gemini_api">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Dexie DB Links -->
+        <mxCell id="link_dexie_1" style="edgeStyle=none;html=1;entryX=1;entryY=0.5;strokeColor=#475569;strokeWidth=1.5;" edge="1" parent="1" source="actor_dexie" target="uc_save_shots_db">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="link_dexie_2" style="edgeStyle=none;html=1;entryX=1;entryY=0.5;strokeColor=#475569;strokeWidth=1.5;" edge="1" parent="1" source="actor_dexie" target="uc_save_drawing_db">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ──────────────── USE CASE INCLUDES & EXTENDS ──────────────── -->
+        <!-- uc_breakdown <<include>> uc_gemini_api -->
+        <mxCell id="inc_breakdown_gemini" value="&amp;laquo;include&amp;raquo;" style="edgeStyle=none;html=1;dashed=1;strokeColor=#2563EB;strokeWidth=1.2;fontColor=#1E40AF;" edge="1" parent="1" source="uc_breakdown" target="uc_gemini_api">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- uc_breakdown <<extend>> uc_fallback -->
+        <mxCell id="ext_breakdown_fallback" value="&amp;laquo;extend&amp;raquo;&lt;br&gt;(on API Error/Offline)" style="edgeStyle=none;html=1;dashed=1;strokeColor=#DC2626;strokeWidth=1.2;fontColor=#991B1B;" edge="1" parent="1" source="uc_fallback" target="uc_breakdown">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- uc_draw_sketch <<include>> uc_auto_snapshot -->
+        <mxCell id="inc_draw_snapshot" value="&amp;laquo;include&amp;raquo;" style="edgeStyle=none;html=1;dashed=1;strokeColor=#059669;strokeWidth=1.2;fontColor=#065F46;" edge="1" parent="1" source="uc_draw_sketch" target="uc_auto_snapshot">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- uc_draw_sketch <<extend>> uc_undo_redo -->
+        <mxCell id="ext_draw_undo" value="&amp;laquo;extend&amp;raquo;" style="edgeStyle=none;html=1;dashed=1;strokeColor=#059669;strokeWidth=1.2;fontColor=#065F46;" edge="1" parent="1" source="uc_undo_redo" target="uc_draw_sketch">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- uc_execute_check <<extend>> uc_add_task -->
+        <mxCell id="ext_check_add" value="&amp;laquo;extend&amp;raquo;" style="edgeStyle=none;html=1;dashed=1;strokeColor=#E11D48;strokeWidth=1.2;fontColor=#9F1239;" edge="1" parent="1" source="uc_add_task" target="uc_execute_check">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- uc_breakdown <<include>> uc_save_shots_db -->
+        <mxCell id="inc_breakdown_save" value="&amp;laquo;include&amp;raquo;" style="edgeStyle=none;html=1;dashed=1;strokeColor=#475569;strokeWidth=1.2;fontColor=#334155;" edge="1" parent="1" source="uc_breakdown" target="uc_save_shots_db">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>`;
+}
+
+// ─────────────────────────────────────────────────────────────
+// 2. DATABASE ERD DIAGRAM XML
+// ─────────────────────────────────────────────────────────────
+function generateDatabaseErdXml() {
+  return `<mxfile host="app.diagrams.net" modified="2026-11-15T10:00:00.000Z" agent="FilmDot Architecture" version="24.0.0" type="device">
+  <diagram id="filmdot-erd" name="Database ERD">
+    <mxGraphModel dx="1420" dy="880" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="erd_title" value="&lt;b&gt;FilmDot — Dexie IndexedDB Entity-Relationship Diagram (ERD)&lt;/b&gt;&lt;br&gt;&lt;i&gt;Client-Side Offline Storage Schema, Indexes &amp; Entity Relationships&lt;/i&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;fontColor=#0F172A;" vertex="1" parent="1">
+          <mxGeometry x="450" y="25" width="750" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Table 1: screenplays -->
+        <mxCell id="tbl_screenplays" value="&lt;b&gt;screenplays&lt;/b&gt;&lt;br&gt;&lt;i&gt;IndexedDB Object Store&lt;/i&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=35;fillColor=#EFF6FF;strokeColor=#3B82F6;strokeWidth=2;fontColor=#1E3A8A;rounded=1;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="100" y="140" width="280" height="175" as="geometry" />
+        </mxCell>
+        <mxCell id="sc_f1" value="&lt;b&gt;&lt;u&gt;++id : number&lt;/u&gt;&lt;/b&gt; [PK, Auto-Inc]" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_screenplays">
+          <mxGeometry y="35" width="280" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="sc_f2" value="title : string [Default: 'Current Scene']" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_screenplays">
+          <mxGeometry y="63" width="280" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="sc_f3" value="text : string [Raw Screenplay Draft]" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_screenplays">
+          <mxGeometry y="91" width="280" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="sc_f4" value="updatedAt : string [ISO 8601 Timestamp]" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_screenplays">
+          <mxGeometry y="119" width="280" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="sc_f5" value="&lt;i&gt;Indexes: ++id&lt;/i&gt;" style="text;html=1;strokeColor=none;fillColor=#DBEAFE;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E40AF;fontSize=10;" vertex="1" parent="tbl_screenplays">
+          <mxGeometry y="147" width="280" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- Table 2: shots (Central Entity) -->
+        <mxCell id="tbl_shots" value="&lt;b&gt;shots&lt;/b&gt;&lt;br&gt;&lt;i&gt;Central Shot List &amp; Parameters Store&lt;/i&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=35;fillColor=#F8FAFC;strokeColor=#475569;strokeWidth=2.5;fontColor=#0F172A;rounded=1;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="580" y="110" width="370" height="515" as="geometry" />
+        </mxCell>
+        <mxCell id="sh_f1" value="&lt;b&gt;&lt;u&gt;++id : number&lt;/u&gt;&lt;/b&gt; [PK, Auto-Inc, Dexie DB ID]" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#0F172A;" vertex="1" parent="tbl_shots">
+          <mxGeometry y="35" width="370" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="sh_f2" value="&lt;b&gt;shot_id : string&lt;/b&gt; [Indexed, Unique Key, e.g. 'SHOT-001']" style="text;html=1;strokeColor=none;fillColor=#FEF08A;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#854D0E;" vertex="1" parent="tbl_shots">
+          <mxGeometry y="63" width="370" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="sh_f3" value="scene_number : number | string [Indexed]" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_shots">
+          <mxGeometry y="91" width="370" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="sh_f4" value="shot_type : string [Indexed, e.g. 'Close-up (CU)']" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_shots">
+          <mxGeometry y="119" width="370" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="sh_f5" value="camera_movement : string [Indexed, e.g. 'Dolly In']" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_shots">
+          <mxGeometry y="147" width="370" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="sh_f6" value="lens : string [e.g. '35mm Narrative Standard (T1.3)']" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_shots">
+          <mxGeometry y="175" width="370" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="sh_f7" value="lensType : 'Static (Prime)' | 'Conditional (Zoom)'" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_shots">
+          <mxGeometry y="203" width="370" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="sh_f8" value="lighting : string [e.g. 'Low-Key / Film Noir']" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_shots">
+          <mxGeometry y="231" width="370" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="sh_f9" value="lightingTemp : string [e.g. '5600K (Daylight Cool)']" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_shots">
+          <mxGeometry y="259" width="370" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="sh_f10" value="description : string [Visual &amp; Framing Action]" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_shots">
+          <mxGeometry y="287" width="370" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="sh_f11" value="characters : string[] [Character Names Array]" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_shots">
+          <mxGeometry y="315" width="370" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="sh_f12" value="takeNumber : number [Indexed, Current Take Count]" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_shots">
+          <mxGeometry y="343" width="370" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="sh_f13" value="isCompleted : boolean [Indexed, Wrap Status]" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_shots">
+          <mxGeometry y="371" width="370" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="sh_f14" value="order : number [Sequence Order in Flow]" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_shots">
+          <mxGeometry y="399" width="370" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="sh_f15" value="notes : string [Director / Crew On-Set Notes]" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_shots">
+          <mxGeometry y="427" width="370" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="sh_f16" value="createdAt / updatedAt : string [ISO 8601, Indexed]" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_shots">
+          <mxGeometry y="455" width="370" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="sh_f17" value="&lt;i&gt;Indexes: ++id, shot_id, scene_number, shot_type, camera_movement, isCompleted, takeNumber, createdAt, updatedAt&lt;/i&gt;" style="text;html=1;strokeColor=none;fillColor=#E2E8F0;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#334155;fontSize=9;" vertex="1" parent="tbl_shots">
+          <mxGeometry y="483" width="370" height="32" as="geometry" />
+        </mxCell>
+
+        <!-- Table 3: canvasDrawings (1-to-1 with shots) -->
+        <mxCell id="tbl_canvas" value="&lt;b&gt;canvasDrawings&lt;/b&gt;&lt;br&gt;&lt;i&gt;Active Storyboard Frame Drawings&lt;/i&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=35;fillColor=#ECFDF5;strokeColor=#10B981;strokeWidth=2;fontColor=#064E3B;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="1150" y="110" width="340" height="203" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_f1" value="&lt;b&gt;&lt;u&gt;++id : number&lt;/u&gt;&lt;/b&gt; [PK, Auto-Inc]" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_canvas">
+          <mxGeometry y="35" width="340" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_f2" value="&lt;b&gt;&amp;amp;shotId : string&lt;/b&gt; [Unique Index, FK -&amp;gt; shots.shot_id]" style="text;html=1;strokeColor=none;fillColor=#A7F3D0;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#065F46;" vertex="1" parent="tbl_canvas">
+          <mxGeometry y="63" width="340" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_f3" value="dataUrl : string [Base64 PNG Image Representation]" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_canvas">
+          <mxGeometry y="91" width="340" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_f4" value="moodboardUrl : string | null [Reference Backdrop]" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_canvas">
+          <mxGeometry y="119" width="340" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_f5" value="createdAt / updatedAt : string [ISO 8601]" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_canvas">
+          <mxGeometry y="147" width="340" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_f6" value="&lt;i&gt;Indexes: ++id, &amp;amp;shotId (Unique)&lt;/i&gt;" style="text;html=1;strokeColor=none;fillColor=#D1FAE5;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#047857;fontSize=10;" vertex="1" parent="tbl_canvas">
+          <mxGeometry y="175" width="340" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- Table 4: canvasDrawingSnapshots (1-to-Many with shots, Rolling 20) -->
+        <mxCell id="tbl_snapshots" value="&lt;b&gt;canvasDrawingSnapshots&lt;/b&gt;&lt;br&gt;&lt;i&gt;Rolling 20 Revision Safety Backups&lt;/i&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=35;fillColor=#F3E8FF;strokeColor=#9333EA;strokeWidth=2;fontColor=#581C87;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="1150" y="380" width="340" height="175" as="geometry" />
+        </mxCell>
+        <mxCell id="ss_f1" value="&lt;b&gt;&lt;u&gt;++id : number&lt;/u&gt;&lt;/b&gt; [PK, Auto-Inc]" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_snapshots">
+          <mxGeometry y="35" width="340" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="ss_f2" value="&lt;b&gt;shotId : string&lt;/b&gt; [Indexed, FK -&amp;gt; shots.shot_id]" style="text;html=1;strokeColor=none;fillColor=#E9D5FF;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#6B21A8;" vertex="1" parent="tbl_snapshots">
+          <mxGeometry y="63" width="340" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="ss_f3" value="dataUrl : string [Base64 PNG Snapshot]" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_snapshots">
+          <mxGeometry y="91" width="340" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="ss_f4" value="createdAt : string [Timestamp, Reverse Sorted]" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_snapshots">
+          <mxGeometry y="119" width="340" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="ss_f5" value="&lt;i&gt;Indexes: ++id, shotId (Pruned to max 20 per shot)&lt;/i&gt;" style="text;html=1;strokeColor=none;fillColor=#F3E8FF;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#7E22CE;fontSize=10;" vertex="1" parent="tbl_snapshots">
+          <mxGeometry y="147" width="340" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- Table 5: progressChecklists (1-to-Many with shots) -->
+        <mxCell id="tbl_checklist" value="&lt;b&gt;progressChecklists&lt;/b&gt;&lt;br&gt;&lt;i&gt;On-Set Department Checklist Items&lt;/i&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=35;fillColor=#FFF1F2;strokeColor=#F43F5E;strokeWidth=2;fontColor=#881337;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="580" y="700" width="370" height="231" as="geometry" />
+        </mxCell>
+        <mxCell id="ck_f1" value="&lt;b&gt;&lt;u&gt;++id : number&lt;/u&gt;&lt;/b&gt; [PK, Auto-Inc]" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_checklist">
+          <mxGeometry y="35" width="370" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="ck_f2" value="&lt;b&gt;shotId : string&lt;/b&gt; [Indexed, FK -&amp;gt; shots.shot_id]" style="text;html=1;strokeColor=none;fillColor=#FECDD3;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#9F1239;" vertex="1" parent="tbl_checklist">
+          <mxGeometry y="63" width="370" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="ck_f3" value="task : string [Action description]" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_checklist">
+          <mxGeometry y="91" width="370" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="ck_f4" value="category : string ['Directing', 'Camera', 'Lighting', 'Audio', ...]" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_checklist">
+          <mxGeometry y="119" width="370" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="ck_f5" value="isDone : boolean [Default: false]" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_checklist">
+          <mxGeometry y="147" width="370" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="ck_f6" value="completedAt : string | null [ISO 8601 Timestamp]" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#1E293B;" vertex="1" parent="tbl_checklist">
+          <mxGeometry y="175" width="370" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="ck_f7" value="&lt;i&gt;Indexes: ++id, shotId, category, isDone&lt;/i&gt;" style="text;html=1;strokeColor=none;fillColor=#FFE4E6;align=left;verticalAlign=middle;spacingLeft=10;fontColor=#BE123C;fontSize=10;" vertex="1" parent="tbl_checklist">
+          <mxGeometry y="203" width="370" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- ──────────────── RELATIONSHIPS & CONNECTORS ──────────────── -->
+        <!-- Relationship 1: screenplays (1) to shots (N) -->
+        <mxCell id="rel_screenplay_shots" value="&lt;b&gt;1 : N&lt;/b&gt;&lt;br&gt;&lt;i&gt;Breaks down into&lt;/i&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#2563EB;strokeWidth=2;fontColor=#1E3A8A;labelBackgroundColor=#EFF6FF;" edge="1" parent="1" source="tbl_screenplays" target="tbl_shots">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="480" y="227" />
+              <mxPoint x="480" y="227" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Relationship 2: shots (1) to canvasDrawings (1) -->
+        <mxCell id="rel_shots_canvas" value="&lt;b&gt;1 : 1&lt;/b&gt;&lt;br&gt;&lt;i&gt;Active Frame Drawing&lt;br&gt;(&amp;amp;shotId unique index)&lt;/i&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#059669;strokeWidth=2;fontColor=#064E3B;labelBackgroundColor=#ECFDF5;" edge="1" parent="1" source="tbl_shots" target="tbl_canvas">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1050" y="210" />
+              <mxPoint x="1050" y="210" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Relationship 3: shots (1) to canvasDrawingSnapshots (N) -->
+        <mxCell id="rel_shots_snapshots" value="&lt;b&gt;1 : N&lt;/b&gt;&lt;br&gt;&lt;i&gt;History Snapshots&lt;br&gt;(Rolling 20 revisions)&lt;/i&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#7E22CE;strokeWidth=2;fontColor=#581C87;labelBackgroundColor=#FAF5FF;" edge="1" parent="1" source="tbl_shots" target="tbl_snapshots">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1050" y="465" />
+              <mxPoint x="1050" y="465" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Relationship 4: shots (1) to progressChecklists (N) -->
+        <mxCell id="rel_shots_checklist" value="&lt;b&gt;1 : N&lt;/b&gt;&lt;br&gt;&lt;i&gt;Production Checklist Items&lt;br&gt;(6 standard + custom tasks)&lt;/i&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#E11D48;strokeWidth=2;fontColor=#881337;labelBackgroundColor=#FFF1F2;" edge="1" parent="1" source="tbl_shots" target="tbl_checklist">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="765" y="650" />
+              <mxPoint x="765" y="650" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Legend / Notes Callout -->
+        <mxCell id="erd_legend" value="&lt;b&gt;Dexie IndexedDB Schema Specifications:&lt;/b&gt;&lt;br&gt;• &lt;b&gt;++id&lt;/b&gt; : Auto-incrementing primary integer key&lt;br&gt;• &lt;b&gt;&amp;amp;field&lt;/b&gt; : Unique indexed constraint (1-to-1 relationship enforced on &amp;amp;shotId)&lt;br&gt;• &lt;b&gt;field&lt;/b&gt; : Standard index for rapid lookups and range queries&lt;br&gt;• &lt;b&gt;Offline-First&lt;/b&gt; : All tables persist locally inside the browser's IndexedDB engine" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fillColor=#FEF9C3;strokeColor=#CA8A04;fontColor=#854D0E;align=left;spacingLeft=10;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="100" y="400" width="380" height="150" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>`;
+}
+
+// ─────────────────────────────────────────────────────────────
+// 3. SEQUENCE DIAGRAMS XML (3 Sequences)
+// ─────────────────────────────────────────────────────────────
+function generateSequenceDiagramsXml() {
+  return `<mxfile host="app.diagrams.net" modified="2026-11-15T10:00:00.000Z" agent="FilmDot Architecture" version="24.0.0" type="device">
+  <diagram id="seq-breakdown" name="Seq 1 - AI Script Breakdown">
+    <mxGraphModel dx="1420" dy="880" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="s1_title" value="&lt;b&gt;Sequence Diagram 1: AI Screenplay Breakdown &amp; Shot Flow Ingestion&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;fontColor=#1E293B;" vertex="1" parent="1">
+          <mxGeometry x="400" y="20" width="800" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Lifelines (Headers) -->
+        <mxCell id="ll_user" value="&lt;b&gt;Director / User&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DBEAFE;strokeColor=#2563EB;fontColor=#1E3A8A;" vertex="1" parent="1">
+          <mxGeometry x="80" y="80" width="130" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ll_app" value="&lt;b&gt;App.jsx&lt;br&gt;(UI Controller)&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDE9FE;strokeColor=#7C3AED;fontColor=#5B21B6;" vertex="1" parent="1">
+          <mxGeometry x="300" y="80" width="130" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ll_service" value="&lt;b&gt;geminiService.js&lt;br&gt;(AI Client)&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E8FF;strokeColor=#9333EA;fontColor=#6B21A8;" vertex="1" parent="1">
+          <mxGeometry x="540" y="80" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ll_gemini" value="&lt;b&gt;Google Gemini&lt;br&gt;3.8 Flash API&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAE8FF;strokeColor=#D946EF;fontColor=#86198F;" vertex="1" parent="1">
+          <mxGeometry x="780" y="80" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ll_db" value="&lt;b&gt;database.js&lt;br&gt;(Dexie IndexedDB)&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DCFCE7;strokeColor=#16A34A;fontColor=#14532D;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="80" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ll_flow" value="&lt;b&gt;React Flow Graph&lt;br&gt;(Shot Nodes &amp; Edges)&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF3C7;strokeColor=#D97706;fontColor=#78350F;" vertex="1" parent="1">
+          <mxGeometry x="1270" y="80" width="150" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Vertical Lifeline Lines -->
+        <mxCell id="line_user" style="edgeStyle=none;dashed=1;strokeColor=#94A3B8;strokeWidth=1.5;" edge="1" parent="1" source="ll_user">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="145" y="700" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="line_app" style="edgeStyle=none;dashed=1;strokeColor=#94A3B8;strokeWidth=1.5;" edge="1" parent="1" source="ll_app">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="365" y="700" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="line_service" style="edgeStyle=none;dashed=1;strokeColor=#94A3B8;strokeWidth=1.5;" edge="1" parent="1" source="ll_service">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="610" y="700" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="line_gemini" style="edgeStyle=none;dashed=1;strokeColor=#94A3B8;strokeWidth=1.5;" edge="1" parent="1" source="ll_gemini">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="850" y="700" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="line_db" style="edgeStyle=none;dashed=1;strokeColor=#94A3B8;strokeWidth=1.5;" edge="1" parent="1" source="ll_db">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="1090" y="700" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="line_flow" style="edgeStyle=none;dashed=1;strokeColor=#94A3B8;strokeWidth=1.5;" edge="1" parent="1" source="ll_flow">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="1345" y="700" as="targetPoint" /></mxGeometry>
+        </mxCell>
+
+        <!-- Step 1: Click Break Down Script -->
+        <mxCell id="msg_1" value="1. Clicks 'Break Down Script' (scriptText)" style="edgeStyle=none;html=1;strokeColor=#2563EB;strokeWidth=1.5;fontColor=#1E3A8A;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="145" y="160" as="sourcePoint" />
+            <mxPoint x="365" y="160" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Step 2: Set Loading State & Save Screenplay -->
+        <mxCell id="msg_2" value="2. saveScreenplay(scriptText) async" style="edgeStyle=none;html=1;strokeColor=#16A34A;strokeWidth=1.5;fontColor=#14532D;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="365" y="190" as="sourcePoint" />
+            <mxPoint x="1090" y="190" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Step 3: Call parseScriptToShots -->
+        <mxCell id="msg_3" value="3. parseScriptToShots(scriptText)" style="edgeStyle=none;html=1;strokeColor=#7C3AED;strokeWidth=1.5;fontColor=#5B21B6;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="365" y="230" as="sourcePoint" />
+            <mxPoint x="610" y="230" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Step 4: Dispatch Prompt to Gemini API -->
+        <mxCell id="msg_4" value="4. ai.models.generateContent({ model: 'gemini-3.8-flash', json_schema })" style="edgeStyle=none;html=1;strokeColor=#9333EA;strokeWidth=1.5;fontColor=#6B21A8;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="610" y="270" as="sourcePoint" />
+            <mxPoint x="850" y="270" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Step 5: Gemini Generates Response -->
+        <mxCell id="msg_5" value="5. Returns JSON response (parsed cinematic shot array)" style="edgeStyle=none;dashed=1;html=1;strokeColor=#D946EF;strokeWidth=1.5;fontColor=#86198F;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="850" y="320" as="sourcePoint" />
+            <mxPoint x="610" y="320" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Step 6: Return parsed shots -->
+        <mxCell id="msg_6" value="6. Returns shot array [{ shot_id, lens, lighting, ... }]" style="edgeStyle=none;dashed=1;html=1;strokeColor=#7C3AED;strokeWidth=1.5;fontColor=#5B21B6;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="610" y="360" as="sourcePoint" />
+            <mxPoint x="365" y="360" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Step 7: Bulk Save to Dexie shotsDB -->
+        <mxCell id="msg_7" value="7. shotsDB.saveShots(parsedShots)" style="edgeStyle=none;html=1;strokeColor=#16A34A;strokeWidth=1.5;fontColor=#14532D;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="365" y="400" as="sourcePoint" />
+            <mxPoint x="1090" y="400" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Step 8: DB Acknowledgment -->
+        <mxCell id="msg_8" value="8. Clear old &amp; bulkAdd new records (with generated dbId)" style="edgeStyle=none;dashed=1;html=1;strokeColor=#16A34A;strokeWidth=1.5;fontColor=#14532D;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1090" y="440" as="sourcePoint" />
+            <mxPoint x="365" y="440" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Step 9: Initialize Flow Nodes & Edges -->
+        <mxCell id="msg_9" value="9. generateFlowFromShots(persistedShots) -&gt; setNodes(), setEdges()" style="edgeStyle=none;html=1;strokeColor=#D97706;strokeWidth=1.5;fontColor=#78350F;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="365" y="480" as="sourcePoint" />
+            <mxPoint x="1345" y="480" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Step 10: Render Shot Nodes in UI -->
+        <mxCell id="msg_10" value="10. Render animated sequential React Flow canvas" style="edgeStyle=none;html=1;strokeColor=#2563EB;strokeWidth=1.5;fontColor=#1E3A8A;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1345" y="530" as="sourcePoint" />
+            <mxPoint x="145" y="530" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Optional Alt Block: Fallback on API Error / Offline -->
+        <mxCell id="box_alt" value="&lt;b&gt;[alt] On Offline / API Key Missing / Error:&lt;/b&gt;&lt;br&gt;App loads DEMO_FALLBACK_SHOTS into Dexie and renders immediate cinematic preview" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF2F2;strokeColor=#EF4444;strokeWidth=1.2;fontColor=#991B1B;align=left;spacingLeft=15;" vertex="1" parent="1">
+          <mxGeometry x="220" y="570" width="1050" height="70" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <diagram id="seq-storyboard" name="Seq 2 - Canvas Drawing &amp; Snapshots">
+    <mxGraphModel dx="1420" dy="880" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="s2_title" value="&lt;b&gt;Sequence Diagram 2: Storyboard Canvas Drawing &amp; Rolling Snapshot Revisions&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;fontColor=#1E293B;" vertex="1" parent="1">
+          <mxGeometry x="400" y="20" width="850" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Lifelines -->
+        <mxCell id="l2_artist" value="&lt;b&gt;Artist / DP&lt;br&gt;(Stylus / Mouse)&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D1FAE5;strokeColor=#059669;fontColor=#064E3B;" vertex="1" parent="1">
+          <mxGeometry x="100" y="80" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="l2_canvas" value="&lt;b&gt;StoryboardCanvas.jsx&lt;br&gt;(Fabric.js Canvas)&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#CCFBF1;strokeColor=#0D9488;fontColor=#115E59;" vertex="1" parent="1">
+          <mxGeometry x="380" y="80" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="l2_repo" value="&lt;b&gt;canvasDrawingsDB&lt;br&gt;(Repository API)&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E0E7FF;strokeColor=#4338CA;fontColor=#312E81;" vertex="1" parent="1">
+          <mxGeometry x="690" y="80" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="l2_db" value="&lt;b&gt;Dexie IndexedDB&lt;br&gt;(canvasDrawings &amp;amp; Snapshots)&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DCFCE7;strokeColor=#16A34A;fontColor=#14532D;" vertex="1" parent="1">
+          <mxGeometry x="990" y="80" width="200" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="l2_node" value="&lt;b&gt;ShotNode.jsx&lt;br&gt;(Node UI Thumbnail)&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF3C7;strokeColor=#D97706;fontColor=#78350F;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="80" width="160" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Vertical Lifelines -->
+        <mxCell id="v2_artist" style="edgeStyle=none;dashed=1;strokeColor=#94A3B8;strokeWidth=1.5;" edge="1" parent="1" source="l2_artist">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="170" y="680" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="v2_canvas" style="edgeStyle=none;dashed=1;strokeColor=#94A3B8;strokeWidth=1.5;" edge="1" parent="1" source="l2_canvas">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="460" y="680" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="v2_repo" style="edgeStyle=none;dashed=1;strokeColor=#94A3B8;strokeWidth=1.5;" edge="1" parent="1" source="l2_repo">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="770" y="680" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="v2_db" style="edgeStyle=none;dashed=1;strokeColor=#94A3B8;strokeWidth=1.5;" edge="1" parent="1" source="l2_db">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="1090" y="680" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="v2_node" style="edgeStyle=none;dashed=1;strokeColor=#94A3B8;strokeWidth=1.5;" edge="1" parent="1" source="l2_node">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="1380" y="680" as="targetPoint" /></mxGeometry>
+        </mxCell>
+
+        <!-- Actions -->
+        <mxCell id="m2_1" value="1. Draws stroke with stylus / mouse on HTML5 canvas" style="edgeStyle=none;html=1;strokeColor=#059669;strokeWidth=1.5;fontColor=#064E3B;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="170" y="160" as="sourcePoint" />
+            <mxPoint x="460" y="160" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m2_2" value="2. Fabric.js fires 'path:created' event" style="edgeStyle=none;html=1;strokeColor=#0D9488;strokeWidth=1.5;fontColor=#115E59;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="460" y="195" as="sourcePoint" />
+            <mxPoint x="460" y="225" as="targetPoint">
+              <Array as="points">
+                <mxPoint x="495" y="195" />
+                <mxPoint x="495" y="225" />
+              </Array>
+            </mxPoint>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m2_3" value="3. canvas.toDataURL('image/png') generates Base64 dataUrl" style="edgeStyle=none;html=1;strokeColor=#0D9488;strokeWidth=1.5;fontColor=#115E59;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="460" y="255" as="sourcePoint" />
+            <mxPoint x="770" y="255" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m2_4" value="4. canvasDrawingsDB.saveDrawing(shotId, dataUrl)" style="edgeStyle=none;html=1;strokeColor=#4338CA;strokeWidth=1.5;fontColor=#312E81;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="770" y="295" as="sourcePoint" />
+            <mxPoint x="1090" y="295" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m2_5" value="5a. db.canvasDrawings.put({ shotId, dataUrl, updatedAt })" style="edgeStyle=none;html=1;strokeColor=#16A34A;strokeWidth=1.5;fontColor=#14532D;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1090" y="335" as="sourcePoint" />
+            <mxPoint x="1090" y="365" as="targetPoint">
+              <Array as="points">
+                <mxPoint x="1130" y="335" />
+                <mxPoint x="1130" y="365" />
+              </Array>
+            </mxPoint>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m2_6" value="5b. db.canvasDrawingSnapshots.add({ shotId, dataUrl, createdAt })&lt;br&gt;&amp;amp; prune to keep latest 20 snapshots" style="edgeStyle=none;html=1;strokeColor=#16A34A;strokeWidth=1.5;fontColor=#14532D;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1090" y="390" as="sourcePoint" />
+            <mxPoint x="1090" y="420" as="targetPoint">
+              <Array as="points">
+                <mxPoint x="1130" y="390" />
+                <mxPoint x="1130" y="420" />
+              </Array>
+            </mxPoint>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m2_7" value="6. Broadcasts onSave(dataUrl) callback to parent node" style="edgeStyle=none;dashed=1;html=1;strokeColor=#0D9488;strokeWidth=1.5;fontColor=#115E59;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="460" y="455" as="sourcePoint" />
+            <mxPoint x="1380" y="455" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m2_8" value="7. Updates mini canvas preview thumbnail in ShotNode" style="edgeStyle=none;html=1;strokeColor=#D97706;strokeWidth=1.5;fontColor=#78350F;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1380" y="495" as="sourcePoint" />
+            <mxPoint x="170" y="495" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Undo Shortcut Scenario -->
+        <mxCell id="box_undo" value="&lt;b&gt;[Shortcut: Ctrl+Z / Ctrl+C]:&lt;/b&gt;&lt;br&gt;Pops last Fabric object from canvas history stack &amp;amp; re-renders canvas without reloading page" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF9C3;strokeColor=#CA8A04;strokeWidth=1.2;fontColor=#854D0E;align=left;spacingLeft=15;" vertex="1" parent="1">
+          <mxGeometry x="250" y="550" width="1020" height="60" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <diagram id="seq-onset" name="Seq 3 - On-Set Take Tracking &amp; Checklist">
+    <mxGraphModel dx="1420" dy="880" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="s3_title" value="&lt;b&gt;Sequence Diagram 3: On-Set Take Recording &amp; Production Checklist Workflow&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;fontColor=#1E293B;" vertex="1" parent="1">
+          <mxGeometry x="400" y="20" width="850" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Lifelines -->
+        <mxCell id="l3_crew" value="&lt;b&gt;1st AD / Camera Crew&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE4E6;strokeColor=#E11D48;fontColor=#9F1239;" vertex="1" parent="1">
+          <mxGeometry x="100" y="80" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="l3_node" value="&lt;b&gt;ShotNode.jsx&lt;br&gt;(Interactive Card)&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FED7AA;strokeColor=#EA580C;fontColor=#9A3412;" vertex="1" parent="1">
+          <mxGeometry x="380" y="80" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="l3_app" value="&lt;b&gt;App.jsx&lt;br&gt;(State &amp; Wrap Progress)&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDE9FE;strokeColor=#7C3AED;fontColor=#5B21B6;" vertex="1" parent="1">
+          <mxGeometry x="660" y="80" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="l3_checkdb" value="&lt;b&gt;checklistDB&lt;br&gt;(Checklist API)&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DCFCE7;strokeColor=#16A34A;fontColor=#14532D;" vertex="1" parent="1">
+          <mxGeometry x="950" y="80" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="l3_dexie" value="&lt;b&gt;Dexie IndexedDB&lt;br&gt;(shots &amp;amp; progressChecklists)&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2E8F0;strokeColor=#475569;fontColor=#0F172A;" vertex="1" parent="1">
+          <mxGeometry x="1220" y="80" width="200" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Vertical Lifelines -->
+        <mxCell id="v3_crew" style="edgeStyle=none;dashed=1;strokeColor=#94A3B8;strokeWidth=1.5;" edge="1" parent="1" source="l3_crew">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="175" y="680" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="v3_node" style="edgeStyle=none;dashed=1;strokeColor=#94A3B8;strokeWidth=1.5;" edge="1" parent="1" source="l3_node">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="455" y="680" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="v3_app" style="edgeStyle=none;dashed=1;strokeColor=#94A3B8;strokeWidth=1.5;" edge="1" parent="1" source="l3_app">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="740" y="680" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="v3_checkdb" style="edgeStyle=none;dashed=1;strokeColor=#94A3B8;strokeWidth=1.5;" edge="1" parent="1" source="l3_checkdb">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="1025" y="680" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="v3_dexie" style="edgeStyle=none;dashed=1;strokeColor=#94A3B8;strokeWidth=1.5;" edge="1" parent="1" source="l3_dexie">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="1320" y="680" as="targetPoint" /></mxGeometry>
+        </mxCell>
+
+        <!-- Actions -->
+        <mxCell id="m3_1" value="1. Clicks '+' to record Take 2" style="edgeStyle=none;html=1;strokeColor=#EA580C;strokeWidth=1.5;fontColor=#9A3412;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="175" y="160" as="sourcePoint" />
+            <mxPoint x="455" y="160" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m3_2" value="2. onUpdateNodeData(nodeId, { takeNumber: 2 })" style="edgeStyle=none;html=1;strokeColor=#7C3AED;strokeWidth=1.5;fontColor=#5B21B6;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="455" y="200" as="sourcePoint" />
+            <mxPoint x="740" y="200" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m3_3" value="3. shotsDB.updateShot(dbId, { takeNumber: 2 })" style="edgeStyle=none;html=1;strokeColor=#475569;strokeWidth=1.5;fontColor=#0F172A;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="740" y="240" as="sourcePoint" />
+            <mxPoint x="1320" y="240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m3_4" value="4. Expands Checklist &amp;amp; checks 'Lock key/fill lighting'" style="edgeStyle=none;html=1;strokeColor=#E11D48;strokeWidth=1.5;fontColor=#9F1239;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="175" y="300" as="sourcePoint" />
+            <mxPoint x="455" y="300" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m3_5" value="5. checklistDB.toggleItem(taskId, true)" style="edgeStyle=none;html=1;strokeColor=#16A34A;strokeWidth=1.5;fontColor=#14532D;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="455" y="340" as="sourcePoint" />
+            <mxPoint x="1025" y="340" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m3_6" value="6. db.progressChecklists.update(taskId, { isDone: true, completedAt })" style="edgeStyle=none;html=1;strokeColor=#16A34A;strokeWidth=1.5;fontColor=#14532D;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1025" y="380" as="sourcePoint" />
+            <mxPoint x="1320" y="380" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m3_7" value="7. Toggles 'Wrap Shot' (isCompleted: true)" style="edgeStyle=none;html=1;strokeColor=#E11D48;strokeWidth=1.5;fontColor=#9F1239;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="175" y="440" as="sourcePoint" />
+            <mxPoint x="455" y="440" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m3_8" value="8. onUpdateNodeData(nodeId, { isCompleted: true })" style="edgeStyle=none;html=1;strokeColor=#7C3AED;strokeWidth=1.5;fontColor=#5B21B6;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="455" y="480" as="sourcePoint" />
+            <mxPoint x="740" y="480" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m3_9" value="9. shotsDB.updateShot(dbId, { isCompleted: true })" style="edgeStyle=none;html=1;strokeColor=#475569;strokeWidth=1.5;fontColor=#0F172A;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="740" y="520" as="sourcePoint" />
+            <mxPoint x="1320" y="520" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m3_10" value="10. Recalculates wrappedCount / totalShots &amp;amp; updates top header progress bar" style="edgeStyle=none;html=1;strokeColor=#2563EB;strokeWidth=1.5;fontColor=#1E3A8A;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="740" y="570" as="sourcePoint" />
+            <mxPoint x="175" y="570" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>`;
+}
+
+// ─────────────────────────────────────────────────────────────
+// 4. TOOL FLOW & SYSTEM ARCHITECTURE XML
+// ─────────────────────────────────────────────────────────────
+function generateToolFlowXml() {
+  return `<mxfile host="app.diagrams.net" modified="2026-11-15T10:00:00.000Z" agent="FilmDot Architecture" version="24.0.0" type="device">
+  <diagram id="toolflow" name="Tool Flow &amp; Architecture">
+    <mxGraphModel dx="1420" dy="880" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="tf_title" value="&lt;b&gt;FilmDot — End-to-End Tool Flow &amp; Technology Stack Architecture&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;fontColor=#0F172A;" vertex="1" parent="1">
+          <mxGeometry x="400" y="20" width="850" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Tier 1: User Interfaces & Visual Layer -->
+        <mxCell id="tier_ui" value="&lt;b&gt;Tier 1: Presentation &amp; Canvas Interaction Layer (React 19 + Tailwind CSS)&lt;/b&gt;" style="swimlane;whiteSpace=wrap;html=1;fillColor=#EFF6FF;strokeColor=#3B82F6;strokeWidth=1.5;fontColor=#1E3A8A;startSize=30;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="90" width="1490" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_screenplay" value="&lt;b&gt;Script Input Editor&lt;/b&gt;&lt;br&gt;Default Neon Noir Sample&lt;br&gt;&amp;amp; Textarea Ingestion" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DBEAFE;strokeColor=#2563EB;fontColor=#1E40AF;" vertex="1" parent="tier_ui">
+          <mxGeometry x="40" y="50" width="220" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_reactflow" value="&lt;b&gt;@xyflow/react Engine&lt;/b&gt;&lt;br&gt;• ShotNode (Cinematic Cards)&lt;br&gt;• ImageNode (Moodboard Cards)&lt;br&gt;• Sequential Bezier Edges" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DBEAFE;strokeColor=#2563EB;fontColor=#1E40AF;" vertex="1" parent="tier_ui">
+          <mxGeometry x="340" y="50" width="260" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_fabric" value="&lt;b&gt;Fabric.js 7.4 Canvas&lt;/b&gt;&lt;br&gt;• Stylus Tablet Drawing&lt;br&gt;• Brush / Eraser / Opacity&lt;br&gt;• Undo History (Ctrl+Z/Ctrl+C)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DBEAFE;strokeColor=#2563EB;fontColor=#1E40AF;" vertex="1" parent="tier_ui">
+          <mxGeometry x="680" y="50" width="250" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_onset_ui" value="&lt;b&gt;On-Set Production Panel&lt;/b&gt;&lt;br&gt;• Take Counter (+/- buttons)&lt;br&gt;• 6-Department Wrap Checklist&lt;br&gt;• Real-time Wrap % Progress Bar" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DBEAFE;strokeColor=#2563EB;fontColor=#1E40AF;" vertex="1" parent="tier_ui">
+          <mxGeometry x="1010" y="50" width="250" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_pwa" value="&lt;b&gt;PWA Manifest &amp;amp; SW&lt;/b&gt;&lt;br&gt;Offline installable desktop&lt;br&gt;&amp;amp; mobile workstation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DBEAFE;strokeColor=#2563EB;fontColor=#1E40AF;" vertex="1" parent="tier_ui">
+          <mxGeometry x="1310" y="50" width="150" height="110" as="geometry" />
+        </mxCell>
+
+        <!-- Tier 2: Application Controller & State Engine -->
+        <mxCell id="tier_app" value="&lt;b&gt;Tier 2: Business Logic &amp; State Management (App.jsx Controller)&lt;/b&gt;" style="swimlane;whiteSpace=wrap;html=1;fillColor=#FAF5FF;strokeColor=#9333EA;strokeWidth=1.5;fontColor=#581C87;startSize=30;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="320" width="1490" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="state_nodes" value="&lt;b&gt;useNodesState &amp;amp; useEdgesState&lt;/b&gt;&lt;br&gt;Dynamic React Flow Graph Topology&lt;br&gt;Position computation (2-column grid)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E8FF;strokeColor=#A855F7;fontColor=#6B21A8;" vertex="1" parent="tier_app">
+          <mxGeometry x="40" y="50" width="270" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="state_handler" value="&lt;b&gt;handleUpdateNodeData(id, changes)&lt;/b&gt;&lt;br&gt;Synchronizes UI state with Dexie DB&lt;br&gt;Updates takes, lenses, lighting, wrap status" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E8FF;strokeColor=#A855F7;fontColor=#6B21A8;" vertex="1" parent="tier_app">
+          <mxGeometry x="380" y="50" width="300" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="state_moodboard" value="&lt;b&gt;Moodboard Linker&lt;/b&gt;&lt;br&gt;Base64 FileReader ingestion&lt;br&gt;&amp;amp; Target Node Edge Creation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E8FF;strokeColor=#A855F7;fontColor=#6B21A8;" vertex="1" parent="tier_app">
+          <mxGeometry x="750" y="50" width="250" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="state_fallback" value="&lt;b&gt;DEMO_FALLBACK_SHOTS&lt;/b&gt;&lt;br&gt;Resilient offline failover shot set&lt;br&gt;Instant demonstration capability" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E8FF;strokeColor=#A855F7;fontColor=#6B21A8;" vertex="1" parent="tier_app">
+          <mxGeometry x="1070" y="50" width="250" height="110" as="geometry" />
+        </mxCell>
+
+        <!-- Tier 3: External Intelligence & Service Layer -->
+        <mxCell id="tier_services" value="&lt;b&gt;Tier 3: AI Intelligence Layer (@google/genai &amp;amp; Gemini 3.8 Flash)&lt;/b&gt;" style="swimlane;whiteSpace=wrap;html=1;fillColor=#FEF2F2;strokeColor=#EF4444;strokeWidth=1.5;fontColor=#991B1B;startSize=30;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="550" width="700" height="210" as="geometry" />
+        </mxCell>
+        <mxCell id="serv_gemini_client" value="&lt;b&gt;geminiService.js&lt;/b&gt;&lt;br&gt;• GoogleGenAI({ apiKey })&lt;br&gt;• Structured Cinematic Director Prompt&lt;br&gt;• Strict JSON Schema Validation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEE2E2;strokeColor=#DC2626;fontColor=#991B1B;" vertex="1" parent="tier_services">
+          <mxGeometry x="40" y="50" width="280" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="serv_gemini_model" value="&lt;b&gt;Gemini 3.8 Flash Model&lt;/b&gt;&lt;br&gt;Extracts Framing, Movement,&lt;br&gt;Lens, Lighting, Characters &amp;amp; Action" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEE2E2;strokeColor=#DC2626;fontColor=#991B1B;" vertex="1" parent="tier_services">
+          <mxGeometry x="380" y="50" width="280" height="120" as="geometry" />
+        </mxCell>
+
+        <!-- Tier 4: Storage & Persistence Layer -->
+        <mxCell id="tier_storage" value="&lt;b&gt;Tier 4: Offline-First Local Storage Layer (Dexie.js IndexedDB)&lt;/b&gt;" style="swimlane;whiteSpace=wrap;html=1;fillColor=#F0FDF4;strokeColor=#22C55E;strokeWidth=1.5;fontColor=#166534;startSize=30;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="870" y="550" width="700" height="210" as="geometry" />
+        </mxCell>
+        <mxCell id="db_shots" value="&lt;b&gt;shotsDB&lt;/b&gt;&lt;br&gt;Shots, takes, lens, lighting&lt;br&gt;&amp;amp; wrap completion" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DCFCE7;strokeColor=#16A34A;fontColor=#15803D;" vertex="1" parent="tier_storage">
+          <mxGeometry x="30" y="50" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="db_canvas_repo" value="&lt;b&gt;canvasDrawingsDB&lt;/b&gt;&lt;br&gt;Base64 PNG sketches&lt;br&gt;&amp;amp; 20-roll snapshots" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DCFCE7;strokeColor=#16A34A;fontColor=#15803D;" vertex="1" parent="tier_storage">
+          <mxGeometry x="250" y="50" width="190" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="db_checklist_repo" value="&lt;b&gt;checklistDB&lt;/b&gt;&lt;br&gt;6-Dept preloaded tasks&lt;br&gt;&amp;amp; custom check items" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DCFCE7;strokeColor=#16A34A;fontColor=#15803D;" vertex="1" parent="tier_storage">
+          <mxGeometry x="480" y="50" width="190" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="db_screenplay_repo" value="&lt;b&gt;screenplayDB&lt;/b&gt;&lt;br&gt;Working scene script draft persistence" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DCFCE7;strokeColor=#16A34A;fontColor=#15803D;" vertex="1" parent="tier_storage">
+          <mxGeometry x="140" y="130" width="220" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="db_engine" value="&lt;b&gt;Dexie IndexedDB Engine&lt;/b&gt;&lt;br&gt;'FilmDotDatabase' (v1 schema)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DCFCE7;strokeColor=#16A34A;fontColor=#15803D;fontStyle=1;" vertex="1" parent="tier_storage">
+          <mxGeometry x="400" y="130" width="240" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Connecting Flows Across Tiers -->
+        <mxCell id="flow_ui_to_app" value="User events &amp;amp; edits" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#3B82F6;strokeWidth=2;fontColor=#1E3A8A;" edge="1" parent="1" source="comp_screenplay" target="state_nodes">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_app_to_ai" value="Screenplay prompt" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#9333EA;strokeWidth=2;fontColor=#6B21A8;" edge="1" parent="1" source="state_nodes" target="serv_gemini_client">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_ai_to_model" value="generateContent()" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#EF4444;strokeWidth=2;fontColor=#991B1B;" edge="1" parent="1" source="serv_gemini_client" target="serv_gemini_model">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_app_to_db" value="Persist shots &amp;amp; parameters" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#22C55E;strokeWidth=2;fontColor=#15803D;" edge="1" parent="1" source="state_handler" target="db_shots">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_canvas_to_db" value="Auto-save Base64 drawings" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#22C55E;strokeWidth=2;fontColor=#15803D;" edge="1" parent="1" source="comp_fabric" target="db_canvas_repo">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_onset_to_db" value="Toggle checks &amp;amp; takes" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#22C55E;strokeWidth=2;fontColor=#15803D;" edge="1" parent="1" source="comp_onset_ui" target="db_checklist_repo">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>`;
+}
+
+// ─────────────────────────────────────────────────────────────
+// 5. COMBINED MASTER MULTI-PAGE DRAW.IO XML
+// ─────────────────────────────────────────────────────────────
+function generateMasterMultiPageXml() {
+  const useCaseDoc = generateUseCaseXml();
+  const erdDoc = generateDatabaseErdXml();
+  const seqDoc = generateSequenceDiagramsXml();
+  const toolFlowDoc = generateToolFlowXml();
+
+  // Extract <diagram> tags from each
+  const getDiagrams = (xmlStr) => {
+    const matches = xmlStr.match(/<diagram[\s\S]*?<\/diagram>/g);
+    return matches ? matches.join('\n  ') : '';
+  };
+
+  return `<mxfile host="app.diagrams.net" modified="2026-11-15T10:00:00.000Z" agent="FilmDot Architecture Master" version="24.0.0" type="device">
+  ${getDiagrams(useCaseDoc)}
+  ${getDiagrams(erdDoc)}
+  ${getDiagrams(seqDoc)}
+  ${getDiagrams(toolFlowDoc)}
+</mxfile>`;
+}
+
+// ─────────────────────────────────────────────────────────────
+// MAIN EXECUTION
+// ─────────────────────────────────────────────────────────────
+const diagramsDir = path.resolve(process.cwd(), 'diagrams');
+if (!fs.existsSync(diagramsDir)) {
+  fs.mkdirSync(diagramsDir, { recursive: true });
+}
+
+// 1. filmdot_use_case.drawio
+fs.writeFileSync(path.join(diagramsDir, 'filmdot_use_case.drawio'), generateUseCaseXml(), 'utf-8');
+console.log('✓ Created diagrams/filmdot_use_case.drawio');
+
+// 2. filmdot_database_erd.drawio
+fs.writeFileSync(path.join(diagramsDir, 'filmdot_database_erd.drawio'), generateDatabaseErdXml(), 'utf-8');
+console.log('✓ Created diagrams/filmdot_database_erd.drawio');
+
+// 3. filmdot_sequence_diagrams.drawio
+fs.writeFileSync(path.join(diagramsDir, 'filmdot_sequence_diagrams.drawio'), generateSequenceDiagramsXml(), 'utf-8');
+console.log('✓ Created diagrams/filmdot_sequence_diagrams.drawio');
+
+// 4. filmdot_tool_flow.drawio
+fs.writeFileSync(path.join(diagramsDir, 'filmdot_tool_flow.drawio'), generateToolFlowXml(), 'utf-8');
+console.log('✓ Created diagrams/filmdot_tool_flow.drawio');
+
+// 5. filmdot_master.drawio (Multi-page file containing all 6 tabs)
+fs.writeFileSync(path.join(diagramsDir, 'filmdot_master.drawio'), generateMasterMultiPageXml(), 'utf-8');
+console.log('✓ Created diagrams/filmdot_master.drawio (All-in-One Multi-Page)');
